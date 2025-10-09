@@ -51,9 +51,24 @@
     </dependency>
   </dependencies>
   <distributionManagement>
+    <!-- Original Sonatype repository (commented out for GitHub Packages) -->
+    <!--
     <snapshotRepository>
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    -->
+
+    <!-- GitHub Packages repository for alphanovatech organization -->
+    <repository>
+      <id>github-alphanovatech</id>
+      <name>GitHub alphanovatech Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/alphanovatech/flatbuffers-java</url>
+    </repository>
+    <snapshotRepository>
+      <id>github-alphanovatech</id>
+      <name>GitHub alphanovatech Apache Maven Snapshots</name>
+      <url>https://maven.pkg.github.com/alphanovatech/flatbuffers-java</url>
     </snapshotRepository>
   </distributionManagement>
   <build>
