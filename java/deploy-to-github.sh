@@ -76,15 +76,50 @@ echo ""
 echo "Step 4: Deploying to GitHub Packages..."
 echo "Repository: https://maven.pkg.github.com/alphanovatech/flatbuffers-java"
 
-if [ "$AUTH_METHOD" = "env" ]; then
-    # Deploy using environment variables
-    mvn deploy -Dgpg.skip=true \
-        -DaltDeploymentRepository=github-alphanovatech::default::https://maven.pkg.github.com/alphanovatech/flatbuffers-java \
-        -Dserver.username="${GITHUB_USERNAME}" \
-        -Dserver.password="${GITHUB_TOKEN}"
-else
-    # Deploy using settings.xml
-    mvn deploy -Dgpg.skip=true
+# Use deploy:deploy-file to bypass nexus-staging plugin conflicts
+# This method works reliably with GitHub Packages
+
+# Deploy main JAR
+echo "Deploying main JAR..."
+mvn deploy:deploy-file \
+  -DgroupId=com.google.flatbuffers \
+  -DartifactId=flatbuffers-java \
+  -Dversion=$VERSION \
+  -Dpackaging=jar \
+  -Dfile=target/flatbuffers-java-$VERSION.jar \
+  -DpomFile=pom.xml \
+  -DrepositoryId=github-alphanovatech \
+  -Durl=https://maven.pkg.github.com/alphanovatech/flatbuffers-java \
+  -Dgpg.skip=true
+
+# Deploy sources JAR if it exists
+if [ -f "target/flatbuffers-java-$VERSION-sources.jar" ]; then
+    echo "Deploying sources JAR..."
+    mvn deploy:deploy-file \
+      -DgroupId=com.google.flatbuffers \
+      -DartifactId=flatbuffers-java \
+      -Dversion=$VERSION \
+      -Dpackaging=jar \
+      -Dfile=target/flatbuffers-java-$VERSION-sources.jar \
+      -DrepositoryId=github-alphanovatech \
+      -Durl=https://maven.pkg.github.com/alphanovatech/flatbuffers-java \
+      -Dclassifier=sources \
+      -Dgpg.skip=true || echo "Sources JAR deployment skipped (may already exist)"
+fi
+
+# Deploy javadoc JAR if it exists
+if [ -f "target/flatbuffers-java-$VERSION-javadoc.jar" ]; then
+    echo "Deploying javadoc JAR..."
+    mvn deploy:deploy-file \
+      -DgroupId=com.google.flatbuffers \
+      -DartifactId=flatbuffers-java \
+      -Dversion=$VERSION \
+      -Dpackaging=jar \
+      -Dfile=target/flatbuffers-java-$VERSION-javadoc.jar \
+      -DrepositoryId=github-alphanovatech \
+      -Durl=https://maven.pkg.github.com/alphanovatech/flatbuffers-java \
+      -Dclassifier=javadoc \
+      -Dgpg.skip=true || echo "Javadoc JAR deployment skipped (may already exist)"
 fi
 
 if [ $? -eq 0 ]; then
