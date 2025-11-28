@@ -61,14 +61,14 @@
 
     <!-- GitHub Packages repository for alphanovatech organization -->
     <repository>
-      <id>github-alphanovatech</id>
+      <id>github</id>
       <name>GitHub alphanovatech Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/alphanovatech/flatbuffers-java</url>
+      <url>https://maven.pkg.github.com/alphanovatech/flatbuffers</url>
     </repository>
     <snapshotRepository>
-      <id>github-alphanovatech</id>
+      <id>github</id>
       <name>GitHub alphanovatech Apache Maven Snapshots</name>
-      <url>https://maven.pkg.github.com/alphanovatech/flatbuffers-java</url>
+      <url>https://maven.pkg.github.com/alphanovatech/flatbuffers</url>
     </snapshotRepository>
   </distributionManagement>
   <build>
